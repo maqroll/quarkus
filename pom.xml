@@ -6,17 +6,17 @@
   <artifactId>quarkus</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <properties>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
-    <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <surefire-plugin.version>2.22.1</surefire-plugin.version>
-    <quarkus.platform.version>1.10.5.Final</quarkus.platform.version>
-    <maven.compiler.target>8</maven.compiler.target>
-    <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
+    <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
+    <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+    <quarkus.platform.version>1.10.5.Final</quarkus.platform.version>
+    <surefire-plugin.version>2.22.1</surefire-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -47,6 +47,10 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-undertow-websockets</artifactId>
     </dependency>
   </dependencies>
   <build>
