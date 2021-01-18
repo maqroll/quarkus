@@ -3,6 +3,7 @@ package org.my.group;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,7 +18,6 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
-import org.jboss.logging.Logger;
 
 @ServerEndpoint("/wss/{id}")
 @ApplicationScoped
@@ -30,7 +30,7 @@ public class WebSocket {
 
   @Inject
   @Channel("my-data-stream")
-  Flowable<Double> prices;
+  Flowable<String> prices;
 
   @OnOpen
   public void onOpen(Session session, @PathParam("id") String username) {
@@ -57,13 +57,17 @@ public class WebSocket {
 
   @PostConstruct
   public void subscribe() {
-    subscription = prices.subscribe((Double price) -> sessions.forEach(s -> {
-      s.getAsyncRemote().sendObject(price, result -> {
-        if (result.getException() != null) {
-          LOG.warn("Unable to send message", result.getException());
-        }
+    LOG.debug("Activate subscription");
+    subscription = prices.subscribe((String price) -> {
+      LOG.debug(price);
+      sessions.forEach(s -> {
+        s.getAsyncRemote().sendObject(price, result -> {
+          if (result.getException() != null) {
+            LOG.warn("Unable to send message", result.getException());
+          }
+        });
       });
-    }));
+    });
   }
 
   @PreDestroy

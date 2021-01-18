@@ -14,8 +14,8 @@ public class PriceConverter {
   @Incoming("prices")
   @Outgoing("my-data-stream")
   @Broadcast
-  public double process(int priceInUsd) {
-    return priceInUsd * CONVERSION_RATE;
+  public String process(String priceInUsd) {
+    return Double.valueOf(Integer.valueOf(priceInUsd) * CONVERSION_RATE).toString();
   }
 
 }
