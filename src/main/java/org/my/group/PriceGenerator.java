@@ -19,7 +19,10 @@ public class PriceGenerator {
   // If max-in-flight-requests=1 -> DROP messages if Kafka is not available.
   // If the available buffer is too small -> it doesn't report the error back (just write a message).
   // and the health-check keeps reporting ok.
-  // Error focus on consumer?? 
+  // This reactive-streams thing fills the same gap that channels in Go but in a totally different way.
+  // Probability of generated-price dropping messages is not negligible: underneath ticks start on subscription
+  // , not in request.
+  // Error focus on consumer??
   @Outgoing("generated-price")
   public Multi<String> generate() {
     return Multi.createFrom().ticks().every(Duration.ofSeconds(5))

@@ -3,6 +3,7 @@ package org.my.group;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -28,9 +29,9 @@ public class WebSocket {
   private List<Session> sessions = new ArrayList<>();
   private Disposable subscription;
 
-  @Inject
-  @Channel("my-data-stream")
-  Flowable<String> prices;
+  //@Inject
+  //@Channel("my-data-stream")
+  //Flowable<String> prices;
 
   @OnOpen
   public void onOpen(Session session, @PathParam("id") String username) {
@@ -55,7 +56,11 @@ public class WebSocket {
     // discarded by design
   }
 
-  @PostConstruct
+  // Two different implementations:
+  // - either subscribe to channel explicitly
+  // - or use incoming to subscribe implicitly
+
+  /*@PostConstruct
   public void subscribe() {
     LOG.debug("Activate subscription");
     subscription = prices.subscribe((String price) -> {
@@ -66,6 +71,18 @@ public class WebSocket {
             LOG.warn("Unable to send message", result.getException());
           }
         });
+      });
+    });
+  }*/
+
+  @Incoming("my-data-stream")
+  public void send(String price) {
+    LOG.debug(price);
+    sessions.forEach(s -> {
+      s.getAsyncRemote().sendObject(price, result -> {
+        if (result.getException() != null) {
+          LOG.warn("Unable to send message", result.getException());
+        }
       });
     });
   }
